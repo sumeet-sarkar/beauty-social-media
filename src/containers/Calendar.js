@@ -9,6 +9,8 @@ import Carousal from '../components/carousal'
 
 import './Calendar.css'
 
+const mockDataPosts = require('../mock_data/posts.json');
+
 class Calendar extends Component {
 
     constructor(props) {
@@ -61,72 +63,83 @@ class Calendar extends Component {
     }
 
     getPosts = (firstFullDate, totalPosts=[...this.totalPosts]) => {
-        const request = {
-            requestobjects: [
-                {
-                    "posts": {
-                        "operationtype": "read",        
-                        "id": {
-                            "return": true
-                        },
-                        "userid": {
-                            "searchvalues" : ["41329663-5834-11eb-8e6e-3ca82abc3dd4"],
-                            "return": true
-                        },
-                        "iscalendarentry": {
-                            "searchvalues" : ["true"],
-                            "return": true
-                        },        
-                        "media": {
-                            "return": true
-                        },
-                        "rating": {
-                            "return": true
-                        },
-                        "text": {
-                            "return": true
-                        },
-                        "privacy": {
-                            "searchvalues": [
-                                18
-                            ],
-                            "return": true
-                        },
-                        "typeofday": {
-                            "return": true
-                        },
-                        "calendardatetime": {
-                            "return": true,
-                            "sort" : "descending"
-                        },
-                        "maxitemcount": "5",
-                        "continuationtoken": this.requestContinuationToken
-                    }
-                }
-            ]
+        // const request = {
+        //     requestobjects: [
+        //         {
+        //             "posts": {
+        //                 "operationtype": "read",        
+        //                 "id": {
+        //                     "return": true
+        //                 },
+        //                 "userid": {
+        //                     "searchvalues" : ["41329663-5834-11eb-8e6e-3ca82abc3dd4"],
+        //                     "return": true
+        //                 },
+        //                 "iscalendarentry": {
+        //                     "searchvalues" : ["true"],
+        //                     "return": true
+        //                 },        
+        //                 "media": {
+        //                     "return": true
+        //                 },
+        //                 "rating": {
+        //                     "return": true
+        //                 },
+        //                 "text": {
+        //                     "return": true
+        //                 },
+        //                 "privacy": {
+        //                     "searchvalues": [
+        //                         18
+        //                     ],
+        //                     "return": true
+        //                 },
+        //                 "typeofday": {
+        //                     "return": true
+        //                 },
+        //                 "calendardatetime": {
+        //                     "return": true,
+        //                     "sort" : "descending"
+        //                 },
+        //                 "maxitemcount": "5",
+        //                 "continuationtoken": this.requestContinuationToken
+        //             }
+        //         }
+        //     ]
+        // }
+
+        // const headers = {
+        //     'Content-Type': 'application/json'
+        // }
+        // axios.post('https://devapi.quinn.care/graph', request, { headers:headers })
+            // .then(response => {
+
+            //         if(response.data.responseobjects[0].posts!=null) {
+            //             response.data.responseobjects[0].posts.forEach(post => {
+            //                 totalPosts.push(post)
+            //             });
+            //         }
+            //         else {
+            //             this.isPostsExhausted = true
+            //         }
+            //         this.requestContinuationToken = response.data.responseobjects[0].continuationtoken
+            //         this.totalPosts = totalPosts
+            //         this.setPosts(firstFullDate)
+            // })
+            // .catch(error => {
+            //     alert(error)
+            // })
+
+        if(mockDataPosts.responseobjects[0].posts!=null) {
+            mockDataPosts.responseobjects[0].posts.forEach(post => {
+                totalPosts.push(post)
+            });
         }
 
-        const headers = {
-            'Content-Type': 'application/json'
-        }
-        axios.post('https://devapi.quinn.care/graph', request, { headers:headers })
-            .then(response => {
-
-                    if(response.data.responseobjects[0].posts!=null) {
-                        response.data.responseobjects[0].posts.forEach(post => {
-                            totalPosts.push(post)
-                        });
-                    }
-                    else {
-                        this.isPostsExhausted = true
-                    }
-                    this.requestContinuationToken = response.data.responseobjects[0].continuationtoken
-                    this.totalPosts = totalPosts
-                    this.setPosts(firstFullDate)
-            })
-            .catch(error => {
-                alert(error)
-            })
+        this.isPostsExhausted = true
+        this.requestContinuationToken = mockDataPosts.responseobjects[0].continuationtoken
+        this.totalPosts = totalPosts
+        this.setPosts(firstFullDate)
     }
 
     setPosts = (firstFullDate) => {
